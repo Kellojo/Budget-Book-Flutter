@@ -1,4 +1,5 @@
 import 'package:budget_book/AppTitle.dart';
+import 'package:budget_book/Config.dart';
 import 'package:budget_book/authentication/AuthScreenArguments.dart';
 import 'package:budget_book/service/AuthService.dart';
 import 'package:budget_book/widgets/BrandButton.dart';
@@ -7,6 +8,7 @@ import 'package:budget_book/widgets/InputField.dart';
 import 'package:budget_book/widgets/VerticalSpacer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({this.showSignInView});
@@ -42,7 +44,9 @@ class _SignUpState extends State<SignUp> {
     }
 
     return Scaffold(
-      appBar: new AppBar(),
+      appBar: GradientAppBar(
+        gradient: Config.BrandGradientInverted,
+      ),
       body: Center(
         child: Container(
           color: Colors.white,

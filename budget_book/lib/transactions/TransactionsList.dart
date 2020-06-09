@@ -6,6 +6,7 @@ import 'package:budget_book/service/AuthService.dart';
 import 'package:budget_book/widgets/TransactionListItem.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 
@@ -30,7 +31,8 @@ class _TransactionsListState extends State<TransactionsList> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar(
+        gradient: Config.BrandGradient,
         title: Text("BudgetP"),
       ),
       drawer: new Drawer(
@@ -43,7 +45,7 @@ class _TransactionsListState extends State<TransactionsList> {
               builder: (context, email) {
                 return DrawerHeader(
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(colors: [Color(0xff514a9d), Color(0xff005575)]),
+                    gradient: Config.BrandGradient,
                   ),
                   child: Center(
                     child: Column(

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Config {
 
   static const String APP_NAME = "BudgetP";
@@ -14,6 +16,21 @@ class Config {
 
   static const String DEFAULT_CURRENCY = "EUR";
   static const String DEFAULT_CURRENCY_SYMBOL = "€";
+
+  static const Color MainBrandColor = Color(0xff514a9d);
+  static const Color SecondaryBrandColor = Color(0xff005575);
+
+  static const LinearGradient BrandGradient = LinearGradient(
+    colors: [MainBrandColor, SecondaryBrandColor],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
+
+  static const LinearGradient BrandGradientInverted = LinearGradient(
+    colors: [SecondaryBrandColor, MainBrandColor],
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+  );
 }
 
 final Config config = Config();

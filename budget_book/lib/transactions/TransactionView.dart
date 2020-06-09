@@ -1,13 +1,12 @@
 
 import 'package:budget_book/Config.dart';
 import 'package:budget_book/models/Transaction.dart';
-import 'package:budget_book/service/AuthService.dart';
 import 'package:budget_book/service/TransactionsService.dart';
 import 'package:budget_book/widgets/DatePicker.dart';
 import 'package:budget_book/widgets/HalfVerticalSpacer.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:moneytextformfield/moneytextformfield.dart';
 
 
@@ -66,23 +65,24 @@ class _TransactionViewState extends State<TransactionView> {
     _transactionTypes[Config.TRANSACTION_TYPE_INCOME] = Container(width: (MediaQuery.of(context).size.width - 50)/ 2, child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[ Padding (padding: EdgeInsets.only(left: 15, right: 15), child: Text("Income", style: TextStyle(color: Colors.green)))]));
 
     return Scaffold(
-      appBar: AppBar(
-            title: Text(title),
-            actions: <Widget>[
-              Builder(
-                builder: (context) => new FlatButton(
-                  onPressed: () {onSaveTransaction(context);},
-                  child: Text(
-                    saveActionText,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                      ),
-                  )
-                ),
-              ),
-            ],
+      appBar: GradientAppBar(
+        gradient: Config.BrandGradientInverted,
+        title: Text(title),
+        actions: <Widget>[
+          Builder(
+            builder: (context) => new FlatButton(
+              onPressed: () {onSaveTransaction(context);},
+              child: Text(
+                saveActionText,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  ),
+              )
+            ),
           ),
+        ],
+      ),
       
       body: Form(
         key: _formKey,

@@ -1,3 +1,4 @@
+import 'package:budget_book/Config.dart';
 import 'package:flutter/material.dart';
 
 class BrandButton extends StatelessWidget {
@@ -15,10 +16,7 @@ class BrandButton extends StatelessWidget {
       padding: EdgeInsets.all(0.0),
       child: Ink(
         decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [Color(0xff514a9d), Color(0xff005575)],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            ),
+            gradient: Config.BrandGradient,
             borderRadius: BorderRadius.circular(30.0)
         ),
         child: Container(
