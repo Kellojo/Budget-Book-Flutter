@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:budget_book/Config.dart';
 import 'package:budget_book/models/Transaction.dart';
 import 'package:budget_book/service/AuthService.dart';
+import 'package:budget_book/service/TransactionsService.dart';
 import 'package:budget_book/widgets/TransactionListItem.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,10 @@ class _TransactionsListState extends State<TransactionsList> {
 
   onTapTransactionListItem(BPTransaction transaction) {
     Navigator.pushNamed(context, "/transactions/transaction", arguments: transaction);
+  }
+
+  onDismissedTransactionListItem(BPTransaction transaction) async {
+    await TransactionsService.deleteTransaction(transaction);
   }
 
   onCreateTransactionPress() {
@@ -124,9 +129,10 @@ class _TransactionsListState extends State<TransactionsList> {
                 return new ListView(
                   children: snapshot.data.documents.map((document) {
                     BPTransaction transaction = BPTransaction.fromMap(document);
-                    return  TransactionListItem(
+                    return TransactionListItem(
                       transaction: transaction,
                       onTap: onTapTransactionListItem,
+                      onDismissed: onDismissedTransactionListItem,
                     );
                   }).toList(),
                 );

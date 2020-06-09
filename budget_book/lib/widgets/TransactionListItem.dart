@@ -9,10 +9,11 @@ import 'Currency.dart';
 
 class TransactionListItem extends StatelessWidget {
 
-  TransactionListItem({this.transaction, this.onTap});
+  TransactionListItem({this.transaction, this.onTap, this.onDismissed});
 
   final BPTransaction transaction;
   final Function onTap;
+  final Function onDismissed;
 
   onTapListTile() {
     onTap(transaction);
@@ -27,25 +28,43 @@ class TransactionListItem extends StatelessWidget {
 
     return Card(
       elevation: 1,
-      child: ListTile(
-        title: new Row(
-          children: <Widget>[
-            Flexible(
-              flex: 1,
-              child: Text(transaction.title, overflow: TextOverflow.ellipsis,),
+      child: Dismissible(
+        direction: DismissDirection.endToStart,
+        key: new Key(transaction.id),
+        onDismissed: (DismissDirection direction) => {
+          this.onDismissed(transaction)
+        },
+        background: Container(
+          color: Colors.red,
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Icon(
+              Icons.delete_forever,
+              color: Colors.white,
             ),
-            Text(" ("),
-            Currency(
-              amount: transaction.amount,
-              currencySymbol: Config.DEFAULT_CURRENCY_SYMBOL,
-              isExpense: transaction.type == Config.TRANSACTION_TYPE_EXPENSE,
-            ),
-            Text(")"),
-          ],
+          )
         ),
-        subtitle: new Text(subtitleText),
-        trailing: Icon(Icons.chevron_right),
-        onTap: onTapListTile,
+        child: ListTile(
+          title: new Row(
+            children: <Widget>[
+              Flexible(
+                flex: 1,
+                child: Text(transaction.title, overflow: TextOverflow.ellipsis,),
+              ),
+              Text(" ("),
+              Currency(
+                amount: transaction.amount,
+                currencySymbol: Config.DEFAULT_CURRENCY_SYMBOL,
+                isExpense: transaction.type == Config.TRANSACTION_TYPE_EXPENSE,
+              ),
+              Text(")"),
+            ],
+          ),
+          subtitle: new Text(subtitleText),
+          trailing: Icon(Icons.chevron_right),
+          onTap: onTapListTile,
+        )
       )
     );
   }

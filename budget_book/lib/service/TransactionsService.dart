@@ -14,4 +14,10 @@ class TransactionsService {
     String userId = await AuthService.getUserUID();
     await Firestore.instance.collection("transactions/" + userId + "/synchronizable").document(transaction.id).setData(transaction.toMap(), merge: false);
   }
+
+  static deleteTransaction(BPTransaction transaction) async {
+    assert(transaction.id != null && transaction.id != "");
+    String userId = await AuthService.getUserUID();
+    await Firestore.instance.collection("transactions/" + userId + "/synchronizable").document(transaction.id).delete();
+  }
 }

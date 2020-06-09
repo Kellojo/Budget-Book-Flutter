@@ -86,7 +86,7 @@ class _TransactionViewState extends State<TransactionView> {
       
       body: Form(
         key: _formKey,
-        child:Center(
+        child: Center(
           child: Padding(
             padding: EdgeInsets.all(20),
             child: Column(
