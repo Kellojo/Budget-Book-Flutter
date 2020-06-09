@@ -4,7 +4,10 @@ import 'package:budget_book/Config.dart';
 import 'package:budget_book/models/Transaction.dart';
 import 'package:budget_book/service/AuthService.dart';
 import 'package:budget_book/service/TransactionsService.dart';
+import 'package:budget_book/widgets/GradientIcon.dart';
+import 'package:budget_book/widgets/HalfVerticalSpacer.dart';
 import 'package:budget_book/widgets/TransactionListItem.dart';
+import 'package:budget_book/widgets/VerticalSpacer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
@@ -125,17 +128,55 @@ class _TransactionsListState extends State<TransactionsList> {
               builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return Center(child: CircularProgressIndicator());
+                } else if (snapshot.data.documents.length == 0) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        
+                        GradientIcon(
+                          gradient: Config.BrandGradient,
+                          icon: Icon(
+                            Icons.library_books,
+                            color: Colors.white,
+                            size: 64
+                          ),
+                        ),
+                        HalfVerticalSpacer(),
+                        Text(
+                          "No Transactions Found",
+                          style: TextStyle(color: Colors.grey[800], fontSize: 20),
+                        ),
+                        HalfVerticalSpacer(),
+                        Text(
+                          "You have no transactions to sync.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        Text(
+                          "Create one to get started",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                        VerticalSpacer(),
+                        VerticalSpacer(),
+                        VerticalSpacer(),
+                        VerticalSpacer(),
+                      ],
+                    ),
+                  );
+                } else {
+                  return new ListView(
+                    children: snapshot.data.documents.map((document) {
+                      BPTransaction transaction = BPTransaction.fromMap(document);
+                      return TransactionListItem(
+                        transaction: transaction,
+                        onTap: onTapTransactionListItem,
+                        onDismissed: onDismissedTransactionListItem,
+                      );
+                    }).toList(),
+                  );
                 }
-                return new ListView(
-                  children: snapshot.data.documents.map((document) {
-                    BPTransaction transaction = BPTransaction.fromMap(document);
-                    return TransactionListItem(
-                      transaction: transaction,
-                      onTap: onTapTransactionListItem,
-                      onDismissed: onDismissedTransactionListItem,
-                    );
-                  }).toList(),
-                );
               },
             );
           },
