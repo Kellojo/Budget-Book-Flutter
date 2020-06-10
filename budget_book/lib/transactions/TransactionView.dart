@@ -1,9 +1,11 @@
 
 import 'package:budget_book/Config.dart';
+import 'package:budget_book/models/Category.dart';
 import 'package:budget_book/models/Transaction.dart';
 import 'package:budget_book/service/TransactionsService.dart';
 import 'package:budget_book/widgets/DatePicker.dart';
 import 'package:budget_book/widgets/HalfVerticalSpacer.dart';
+import 'package:combos/combos.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
@@ -141,14 +143,29 @@ class _TransactionViewState extends State<TransactionView> {
                   ),
                 ),
 
-                TextFormField(
-                  initialValue: transaction.category,
-                  decoration: InputDecoration(labelText: "Category", hintText: "Category",),
-                  onChanged: (value) {
+                TypeaheadCombo<String>(
+                  getList: (search) async {
+                    return await TransactionsService.getMyCategories(search);
+                  },
+                  getItemText: (item) => item,
+                  itemBuilder: (context, parameters, item, selected, text) => ListTile(
+                    selected: !!selected,
+                    title: TypeaheadCombo.markText(
+                      item,
+                      text,
+                      const TextStyle(
+                      decoration: TextDecoration.underline,
+                      decorationColor: Colors.grey),
+                    ),
+                  ),
+                  selected: transaction.category,
+                  onSelectedChanged: (value) {
                     setState(() {
                       transaction.category = value;
                     });
                   },
+                  //initialValue: transaction.category,
+                  decoration: InputDecoration(labelText: "Category", hintText: "Category",),
                 ),
                 HalfVerticalSpacer(),
 
