@@ -6,6 +6,7 @@ import 'package:budget_book/service/TransactionsService.dart';
 import 'package:budget_book/widgets/DatePicker.dart';
 import 'package:budget_book/widgets/HalfVerticalSpacer.dart';
 import 'package:budget_book/widgets/PageContainer.dart';
+import 'package:budget_book/widgets/SnackBarUtils.dart';
 import 'package:combos/combos.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,11 +43,10 @@ class _TransactionViewState extends State<TransactionView> {
       } else {
         await TransactionsService.createTransaction(transaction);
         message = "Successfully created transaction";
+        
       }
 
-      // snackbar
-      final snackBar = SnackBar(content: Text(message, textAlign: TextAlign.center,), backgroundColor: Colors.green,); 
-      Scaffold.of(_context).showSnackBar(snackBar);
+      showSnackBar(_context, SnackBarType.SUCCESS, message);
       Navigator.pop(context);
     }
   }

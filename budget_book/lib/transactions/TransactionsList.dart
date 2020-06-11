@@ -4,8 +4,10 @@ import 'package:budget_book/Config.dart';
 import 'package:budget_book/models/Transaction.dart';
 import 'package:budget_book/service/AuthService.dart';
 import 'package:budget_book/service/TransactionsService.dart';
+import 'package:budget_book/widgets/ChangePasswordDialog.dart';
 import 'package:budget_book/widgets/GradientIcon.dart';
 import 'package:budget_book/widgets/HalfVerticalSpacer.dart';
+import 'package:budget_book/widgets/SnackBarUtils.dart';
 import 'package:budget_book/widgets/TransactionListItem.dart';
 import 'package:budget_book/widgets/VerticalSpacer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -35,6 +37,20 @@ class _TransactionsListState extends State<TransactionsList> {
     Navigator.pushNamed(context, "/transactions/transaction");
   }
 
+  onChangePassword(_context) async {
+    ChangePasswordResult result = await showChangePasswordDialog(context);
+    if (result != null) {
+      try {
+       await _authService.changePassword(result.oldPassword, result.newPassword);
+      } catch(e) {
+        showSnackBar(_context, SnackBarType.ERROR, "Could not change password");
+        return;
+      }
+
+      showSnackBar(_context, SnackBarType.SUCCESS, "Successfully changed password");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -43,80 +59,93 @@ class _TransactionsListState extends State<TransactionsList> {
         gradient: Config.BrandGradient,
         title: Text("BudgetP"),
       ),
-      drawer: new Drawer(
-        child: ListView(
-          // Important: Remove any padding from the ListView.
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            FutureBuilder(
-              future: AuthService.getUserEmail(),
-              builder: (context, email) {
-                return DrawerHeader(
-                  decoration: BoxDecoration(
-                    gradient: Config.BrandGradient,
-                  ),
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text('Welcome', style: TextStyle(color: Colors.white, fontSize: 25),),
-                        Text(email.data, style: TextStyle(color: Colors.white, fontSize: 25),),
-                      ],
-                    ), 
-                  ),
-                );
-              },
+      drawer: Builder(
+        builder: (context) {
+          return new Drawer(
+            child: ListView(
+              // Important: Remove any padding from the ListView.
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                FutureBuilder(
+                  future: AuthService.getUserEmail(),
+                  builder: (context, email) {
+                    return DrawerHeader(
+                      decoration: BoxDecoration(
+                        gradient: Config.BrandGradient,
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text('Welcome', style: TextStyle(color: Colors.white, fontSize: 25),),
+                            Text(email.data != null ? email.data : "loading...", style: TextStyle(color: Colors.white, fontSize: 25),),
+                          ],
+                        ), 
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Text('Get BudgetP desktop app'),
+                  leading: Icon(Icons.desktop_mac),
+                  onTap: () async {
+                    const url = Config.BUDGET_P_WEBSITE;
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    }
+                  },
+                ),
+                ListTile(
+                  title: Text('About'),
+                  leading: Icon(Icons.info_outline),
+                  onTap: () {
+                    showAboutDialog(
+                      context: context,
+                      applicationName: Config.APP_NAME,
+                      applicationVersion: Config.VERSION,
+                      applicationLegalese: Config.APP_LEGALESE,
+                      applicationIcon: Image(
+                        image: AssetImage(Config.APP_ICON),
+                        width: 48,
+                        height: 48,
+                      ),
+                      useRootNavigator: true
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Text('Reach out'),
+                  leading: Icon(Icons.mail_outline),
+                  onTap: () async {
+                    const url = "mailto:" + Config.SUPPORT_EMAIL;
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    }
+                  },
+                ),
+                
+                Divider(),
+                ListTile(
+                  title: Text('Change password'),
+                  leading: Icon(Icons.vpn_key),
+                  onTap: () async {
+                    onChangePassword(context);
+                  },
+                ),
+                ListTile(
+                  title: Text('Sign out'),
+                  leading: Icon(Icons.exit_to_app),
+                  onTap: () async {
+                    if (await _authService.signOut()) {
+                      Navigator.pushNamedAndRemoveUntil(context, "/signIn", (route) {return false;});
+                    }
+                  },
+                ),
+              ],
             ),
-            ListTile(
-              title: Text('Get BudgetP desktop app'),
-              leading: Icon(Icons.desktop_mac),
-              onTap: () async {
-                const url = Config.BUDGET_P_WEBSITE;
-                if (await canLaunch(url)) {
-                  await launch(url);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('About'),
-              leading: Icon(Icons.info_outline),
-              onTap: () {
-                showAboutDialog(
-                  context: context,
-                  applicationName: Config.APP_NAME,
-                  applicationVersion: Config.VERSION,
-                  applicationLegalese: Config.APP_LEGALESE,
-                  applicationIcon: Image(
-                    image: AssetImage(Config.APP_ICON),
-                    width: 48,
-                    height: 48,
-                  ),
-                  useRootNavigator: true
-                );
-              },
-            ),
-            ListTile(
-              title: Text('Reach out'),
-              leading: Icon(Icons.mail_outline),
-              onTap: () async {
-                const url = "mailto:" + Config.SUPPORT_EMAIL;
-                if (await canLaunch(url)) {
-                  await launch(url);
-                }
-              },
-            ),
-            ListTile(
-              title: Text('Sign out'),
-              leading: Icon(Icons.exit_to_app),
-              onTap: () async {
-                if (await _authService.signOut()) {
-                  Navigator.pushNamedAndRemoveUntil(context, "/signIn", (route) {return false;});
-                }
-              },
-            ),
-          ],
-        ),
+          );
+        } 
       ),
       body: new Padding(
         padding: EdgeInsets.only(top: 12.5, left: 12.5, right: 12.5),

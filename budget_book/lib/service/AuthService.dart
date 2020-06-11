@@ -39,6 +39,19 @@ class AuthService {
     return "";
   }
 
+  /// updates the password of the given user
+  Future changePassword(String oldPassword, String newPassword) async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    AuthResult authResult = await user.reauthenticateWithCredential(
+      EmailAuthProvider.getCredential(
+        email: user.email,
+        password: oldPassword,
+      ),
+    );
+
+    await authResult.user.updatePassword(newPassword);
+  }
+
   /// Performs a sign in with the given credentials
   Future<User> signIn(String email, String password) async {
     AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);

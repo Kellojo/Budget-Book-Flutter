@@ -10,6 +10,7 @@ class Config {
   static const String SUPPORT_EMAIL = "kellojo1@gmail.com";
 
 
+static const int MIN_PASSWORD_LENGTH = 6;
 
   static const String TRANSACTION_TYPE_EXPENSE = "expense";
   static const String TRANSACTION_TYPE_INCOME = "income";
