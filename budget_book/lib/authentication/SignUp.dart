@@ -20,7 +20,7 @@ class SignUp extends StatefulWidget {
   _SignUpState createState() => _SignUpState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUpState extends State<SignUp> with TickerProviderStateMixin {
 
   final AuthService _authService = AuthService();
   String email = "";
@@ -61,18 +61,18 @@ class _SignUpState extends State<SignUp> {
             ),
             VerticalSpacer(),
             InputField(
-              onChanged: (val) {setState(() => email = val); },
+              onChanged: (val) {setState(() => {email = val, errorMessage = ""}); },
               hintText: "E-Mail",
               text: args != null ? args.email : "",
             ),
             VerticalSpacer(),
             InputField(
-              onChanged: (val) {setState(() => password = val); },
+              onChanged: (val) {setState(() => {password = val, errorMessage = ""}); },
               hintText: "Password",
               obscureText: true,
             ),
             VerticalSpacer(),
-            ErrorMessage(text: errorMessage),
+            ErrorMessage(text: errorMessage, vsync: this,),
             VerticalSpacer(),
             BrandButton(text: "Sign Up", onPressed: onSignUpPress),
             VerticalSpacer(),

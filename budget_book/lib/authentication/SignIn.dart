@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
 
 
-class SignInState extends State<SignIn> {
+class SignInState extends State<SignIn> with TickerProviderStateMixin {
 
   final AuthService _authService = AuthService();
   String email = "";
@@ -47,18 +47,19 @@ class SignInState extends State<SignIn> {
             ),
             VerticalSpacer(),
             InputField(
-              onChanged: (val) {setState(() => email = val); },
+              onChanged: (val) {setState(() => {email = val, errorMessage = ""}); },
               hintText: "E-Mail",
               text: email,
             ),
             VerticalSpacer(),
             InputField(
-              onChanged: (val) {setState(() => password = val); },
+              onChanged: (val) {setState(() => {password = val, errorMessage = ""}); },
               hintText: "Password",
               obscureText: true,
             ),
             VerticalSpacer(),
-            ErrorMessage(text: errorMessage),
+            ErrorMessage(text: errorMessage, vsync: this,),
+            
             VerticalSpacer(),
             BrandButton(text: "Sign In", onPressed: onSignInPress),
             VerticalSpacer(),
