@@ -50,7 +50,12 @@ class TransactionListItem extends StatelessWidget {
             children: <Widget>[
               Flexible(
                 flex: 1,
-                child: Text(transaction.title, overflow: TextOverflow.ellipsis,),
+                child: Text(
+                  transaction.title,
+                  maxLines: 1,
+                  softWrap: false,
+                  overflow: TextOverflow.fade,
+                ),
               ),
               Text(" ("),
               Currency(
