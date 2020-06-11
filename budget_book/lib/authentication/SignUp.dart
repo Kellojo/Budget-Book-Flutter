@@ -40,7 +40,7 @@ class _SignUpState extends State<SignUp> {
   @override
   Widget build(BuildContext context) {
     final AuthScreenArguments args = ModalRoute.of(context).settings.arguments;
-    if (args != null) {
+    if (args != null && email == "") {
       email = args.email;
     }
 
