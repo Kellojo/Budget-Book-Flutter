@@ -5,6 +5,7 @@ import 'package:budget_book/models/Transaction.dart';
 import 'package:budget_book/service/TransactionsService.dart';
 import 'package:budget_book/widgets/DatePicker.dart';
 import 'package:budget_book/widgets/HalfVerticalSpacer.dart';
+import 'package:budget_book/widgets/PageContainer.dart';
 import 'package:combos/combos.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -86,11 +87,10 @@ class _TransactionViewState extends State<TransactionView> {
         ],
       ),
       
-      body: Form(
-        key: _formKey,
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.all(20),
+      body: PageContainer(
+        child: Form(
+          key: _formKey,
+          child: Center(
             child: Column(
               children: <Widget>[
                 CupertinoSlidingSegmentedControl(
@@ -197,9 +197,9 @@ class _TransactionViewState extends State<TransactionView> {
                 
               ],
             )
-          )
-        )
-      )
+          ),
+        ),
+      ),
     );
   }
 }

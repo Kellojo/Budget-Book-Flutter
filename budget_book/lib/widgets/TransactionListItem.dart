@@ -22,7 +22,7 @@ class TransactionListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String subtitleText = timeago.format(transaction.occurredOn);
-    if (transaction.category.trim() != "") {
+    if (transaction.category != null && transaction.category.trim() != "") {
       subtitleText += " - " + transaction.category;
     }
 
